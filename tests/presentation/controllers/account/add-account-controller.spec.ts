@@ -15,15 +15,15 @@ const makeSut = (): Sut => {
   }
 }
 
-const mockInput = (): AddAccountController.Input => ({
+const mockRequest = (): AddAccountController.Request => ({
   username: 'any_username'
 })
 
 describe('AddAccountController', () => {
   test('Should call AddAccount with correct values', async() => {
     const { sut, addAccountSpy } = makeSut()
-    const input = mockInput()
-    await sut.handle(input)
-    expect(addAccountSpy.input).toEqual(input)
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(addAccountSpy.input).toEqual(request)
   })
 })
