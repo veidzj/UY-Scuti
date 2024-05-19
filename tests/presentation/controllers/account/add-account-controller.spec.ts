@@ -29,11 +29,20 @@ describe('AddAccountController', () => {
 
   test('Should return status 201 with accountId on success', async() => {
     const { sut, addAccountSpy } = makeSut()
-    const request = mockRequest()
-    const response = await sut.handle(request)
+    const response = await sut.handle(mockRequest())
     expect(response).toEqual({
       statusCode: 201,
       body: addAccountSpy.output
+    })
+  })
+
+  test('Should return status 500 if AddAccount throws', async() => {
+    const { sut, addAccountSpy } = makeSut()
+    jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(new Error())
+    const response = await sut.handle(mockRequest())
+    expect(response).toEqual({
+      statusCode: 500,
+      body: 'Internal Server Error'
     })
   })
 })
