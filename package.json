@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "git-commit-msg-linter": "^5.0.7",
-    "lint-staged": "^15.2.2"
+    "lint-staged": "^15.2.2",
+    "typescript": "^5.4.5"
   }
 }
