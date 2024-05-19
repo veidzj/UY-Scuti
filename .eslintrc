@@ -3,5 +3,10 @@
   "parserOptions": {
     "project": "tsconfig.json"
   },
+  "rules": {
+    "space-before-function-paren": ["error", "never"],
+    "@typescript-eslint/space-before-function-paren": "off",
+    "@typescript-eslint/no-namespace": "off"
+  },
   "ignorePatterns": ["*.config.ts"]
 }
