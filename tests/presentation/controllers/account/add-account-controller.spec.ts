@@ -26,4 +26,14 @@ describe('AddAccountController', () => {
     await sut.handle(request)
     expect(addAccountSpy.input).toEqual(request)
   })
+
+  test('Should return status 201 with accountId on success', async() => {
+    const { sut, addAccountSpy } = makeSut()
+    const request = mockRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual({
+      statusCode: 201,
+      body: addAccountSpy.output
+    })
+  })
 })
