@@ -2,5 +2,6 @@
   "extends": "love",
   "parserOptions": {
     "project": "tsconfig.json"
-  }
+  },
+  "ignorePatterns": ["*.config.ts"]
 }
