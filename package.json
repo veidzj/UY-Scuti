@@ -2,7 +2,13 @@
   "name": "uy-scuti",
   "version": "0.0.0",
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests --noStackTrace --runInBand --no-cache",
+    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test:unit": "npm test -- --watch -c jest-unit.config.ts",
+    "test:integration": "npm test -- --watch -c jest-integration.config.ts",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:coverage": "npm test -- --coverage",
+    "test:changed": "npm test -- --changedSince=origin/main",
     "prepare": "husky"
   },
   "devDependencies": {
