@@ -1,6 +1,10 @@
 import { type AddAccount } from '@/domain/usecases/account/add-account'
 import { AddAccountController } from '@/presentation/controllers/account/add-account-controller'
 
+const mockInput = (): AddAccountController.Input => ({
+  username: 'any_username'
+})
+
 describe('AddAccountController', () => {
   test('Should call AddAccount with correct values', async() => {
     class AddAccountSpy implements AddAccount {
@@ -12,7 +16,8 @@ describe('AddAccountController', () => {
     }
     const addAccountSpy = new AddAccountSpy()
     const sut = new AddAccountController(addAccountSpy)
-    await sut.handle({ name: '' })
-    expect(addAccountSpy.input).toEqual({ name: '' })
+    const input = mockInput()
+    await sut.handle(input)
+    expect(addAccountSpy.input).toEqual(input)
   })
 })
