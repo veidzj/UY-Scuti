@@ -6,10 +6,17 @@ export class AddAccountController implements Controller {
   constructor(private readonly addAccount: AddAccount) {}
 
   public async handle(request: AddAccountController.Request): Promise<HttpResponse> {
-    const accountId = await this.addAccount.add(request)
-    return {
-      statusCode: 201,
-      body: accountId
+    try {
+      const accountId = await this.addAccount.add(request)
+      return {
+        statusCode: 201,
+        body: accountId
+      }
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: 'Internal Server Error'
+      }
     }
   }
 }
