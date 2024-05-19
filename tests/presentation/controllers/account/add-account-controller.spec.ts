@@ -32,7 +32,9 @@ describe('AddAccountController', () => {
     const response = await sut.handle(mockRequest())
     expect(response).toEqual({
       statusCode: 201,
-      body: addAccountSpy.output
+      body: {
+        accountId: addAccountSpy.output
+      }
     })
   })
 
@@ -42,7 +44,7 @@ describe('AddAccountController', () => {
     const response = await sut.handle(mockRequest())
     expect(response).toEqual({
       statusCode: 500,
-      body: 'Internal Server Error'
+      body: 'The server has encountered an unexpected error'
     })
   })
 })
