@@ -1,3 +1,4 @@
+import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 import { AddAccountController } from '@/presentation/controllers/account/add-account-controller'
 import { AddAccountSpy } from '@/tests/domain/mocks/add-account-mock'
 
@@ -35,6 +36,16 @@ describe('AddAccountController', () => {
       body: {
         accountId: addAccountSpy.output
       }
+    })
+  })
+
+  test('Should return status 409 if AddAccount throws EmailInUseError', async() => {
+    const { sut, addAccountSpy } = makeSut()
+    jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(new EmailInUseError())
+    const response = await sut.handle(mockRequest())
+    expect(response).toEqual({
+      statusCode: 409,
+      body: 'Email is already in use'
     })
   })
 
