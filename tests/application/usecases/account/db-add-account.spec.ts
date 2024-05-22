@@ -22,50 +22,48 @@ const makeSut = (): Sut => {
 }
 
 describe('DbAddAccount', () => {
-  test('Should call CheckAccountByEmailRepository with correct email', async() => {
-    const { sut, checkAccountByEmailRepositorySpy } = makeSut()
-    const addAccountInput = mockAddAccountInput()
-    await sut.add(addAccountInput)
-    expect(checkAccountByEmailRepositorySpy.email).toBe(addAccountInput.email)
+  describe('CheckAccountByEmailRepository', () => {
+    test('Should call CheckAccountByEmailRepository with correct email', async() => {
+      const { sut, checkAccountByEmailRepositorySpy } = makeSut()
+      const addAccountInput = mockAddAccountInput()
+      await sut.add(addAccountInput)
+      expect(checkAccountByEmailRepositorySpy.email).toBe(addAccountInput.email)
+    })
+
+    test('Should throw if CheckAccountByEmailRepository throws', async() => {
+      const { sut, checkAccountByEmailRepositorySpy } = makeSut()
+      jest.spyOn(checkAccountByEmailRepositorySpy, 'check').mockRejectedValueOnce(new Error())
+      const promise = sut.add(mockAddAccountInput())
+      await expect(promise).rejects.toThrow()
+    })
+
+    test('Should throw EmailInUseError if CheckAccountByEmailRepository returns true', async() => {
+      const { sut, checkAccountByEmailRepositorySpy } = makeSut()
+      checkAccountByEmailRepositorySpy.output = true
+      const promise = sut.add(mockAddAccountInput())
+      await expect(promise).rejects.toThrow(new EmailInUseError())
+    })
   })
 
-  test('Should throw if CheckAccountByEmailRepository throws', async() => {
-    const { sut, checkAccountByEmailRepositorySpy } = makeSut()
-    jest.spyOn(checkAccountByEmailRepositorySpy, 'check').mockRejectedValueOnce(new Error())
-    const promise = sut.add(mockAddAccountInput())
-    await expect(promise).rejects.toThrow()
-  })
+  describe('AddAccountRepository', () => {
+    test('Should call AddAccountRepository with correct values', async() => {
+      const { sut, addAccountRepositorySpy } = makeSut()
+      const addAccountInput = mockAddAccountInput()
+      await sut.add(addAccountInput)
+      expect(addAccountRepositorySpy.input).toEqual(addAccountInput)
+    })
 
-  test('Should throw EmailInUseError if CheckAccountByEmailRepository returns true', async() => {
-    const { sut, checkAccountByEmailRepositorySpy } = makeSut()
-    checkAccountByEmailRepositorySpy.output = true
-    const promise = sut.add(mockAddAccountInput())
-    await expect(promise).rejects.toThrow(new EmailInUseError())
-  })
+    test('Should throw if AddAccountRepository throws', async() => {
+      const { sut, addAccountRepositorySpy } = makeSut()
+      jest.spyOn(addAccountRepositorySpy, 'add').mockRejectedValueOnce(new Error())
+      const promise = sut.add(mockAddAccountInput())
+      await expect(promise).rejects.toThrow()
+    })
 
-  test('Should not throw on success', async() => {
-    const { sut } = makeSut()
-    const promise = sut.add(mockAddAccountInput())
-    await expect(promise).resolves.not.toThrow()
-  })
-
-  test('Should call AddAccountRepository with correct values', async() => {
-    const { sut, addAccountRepositorySpy } = makeSut()
-    const addAccountInput = mockAddAccountInput()
-    await sut.add(addAccountInput)
-    expect(addAccountRepositorySpy.input).toEqual(addAccountInput)
-  })
-
-  test('Should throw if AddAccountRepository throws', async() => {
-    const { sut, addAccountRepositorySpy } = makeSut()
-    jest.spyOn(addAccountRepositorySpy, 'add').mockRejectedValueOnce(new Error())
-    const promise = sut.add(mockAddAccountInput())
-    await expect(promise).rejects.toThrow()
-  })
-
-  test('Should return an accountId on success', async() => {
-    const { sut, addAccountRepositorySpy } = makeSut()
-    const accountId = await sut.add(mockAddAccountInput())
-    expect(accountId).toBe(addAccountRepositorySpy.output)
+    test('Should return an accountId on success', async() => {
+      const { sut, addAccountRepositorySpy } = makeSut()
+      const accountId = await sut.add(mockAddAccountInput())
+      expect(accountId).toBe(addAccountRepositorySpy.output)
+    })
   })
 })
