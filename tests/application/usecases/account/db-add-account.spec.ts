@@ -38,4 +38,10 @@ describe('DbAddAccount', () => {
     const promise = sut.add(mockAddAccountInput())
     await expect(promise).rejects.toThrow(new EmailInUseError())
   })
+
+  test('Should not throw on success', async() => {
+    const { sut } = makeSut()
+    const promise = sut.add(mockAddAccountInput())
+    await expect(promise).resolves.not.toThrow()
+  })
 })
