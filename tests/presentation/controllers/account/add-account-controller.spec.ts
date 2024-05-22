@@ -1,6 +1,6 @@
 import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 import { AddAccountController } from '@/presentation/controllers/account/add-account-controller'
-import { AddAccountSpy } from '@/tests/domain/mocks/add-account-mock'
+import { AddAccountSpy } from '@/tests/domain/mocks/account/add-account-mock'
 import { ValidationSpy } from '@/tests/presentation/mocks/validation-mock'
 import { ValidationError } from '@/validation/errors/validation-error'
 
@@ -22,7 +22,8 @@ const makeSut = (): Sut => {
 }
 
 const mockRequest = (): AddAccountController.Request => ({
-  username: 'any_username'
+  username: 'any_username',
+  email: 'any_email@mail.com'
 })
 
 describe('AddAccountController', () => {

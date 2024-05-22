@@ -32,5 +32,6 @@ export class AddAccountController implements Controller {
 export namespace AddAccountController {
   export interface Request {
     username: string
+    email: string
   }
 }
