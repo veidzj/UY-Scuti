@@ -1,6 +1,7 @@
 import { CheckAccountByEmailRepositorySpy } from '@/tests/application/mocks/account/check-account-by-email-repository-mock'
 import { mockAddAccountInput } from '@/tests/domain/mocks/account/add-account-mock'
 import { DbAddAccount } from '@/application/usecases/account/db-add-account'
+import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 
 interface Sut {
   sut: DbAddAccount
@@ -29,5 +30,12 @@ describe('DbAddAccount', () => {
     jest.spyOn(checkAccountByEmailRepositorySpy, 'check').mockRejectedValueOnce(new Error())
     const promise = sut.add(mockAddAccountInput())
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should throw EmailInUseError if CheckAccountByEmailRepository returns true', async() => {
+    const { sut, checkAccountByEmailRepositorySpy } = makeSut()
+    checkAccountByEmailRepositorySpy.output = true
+    const promise = sut.add(mockAddAccountInput())
+    await expect(promise).rejects.toThrow(new EmailInUseError())
   })
 })
