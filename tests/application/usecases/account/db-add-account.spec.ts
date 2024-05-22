@@ -2,18 +2,22 @@ import { CheckAccountByEmailRepositorySpy } from '@/tests/application/mocks/acco
 import { mockAddAccountInput } from '@/tests/domain/mocks/account/add-account-mock'
 import { DbAddAccount } from '@/application/usecases/account/db-add-account'
 import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
+import { AddAccountRepositorySpy } from '@/tests/application/mocks/account/add-account-repository-mock'
 
 interface Sut {
   sut: DbAddAccount
   checkAccountByEmailRepositorySpy: CheckAccountByEmailRepositorySpy
+  addAccountRepositorySpy: AddAccountRepositorySpy
 }
 
 const makeSut = (): Sut => {
   const checkAccountByEmailRepositorySpy = new CheckAccountByEmailRepositorySpy()
-  const sut = new DbAddAccount(checkAccountByEmailRepositorySpy)
+  const addAccountRepositorySpy = new AddAccountRepositorySpy()
+  const sut = new DbAddAccount(checkAccountByEmailRepositorySpy, addAccountRepositorySpy)
   return {
     sut,
-    checkAccountByEmailRepositorySpy
+    checkAccountByEmailRepositorySpy,
+    addAccountRepositorySpy
   }
 }
 
@@ -43,5 +47,12 @@ describe('DbAddAccount', () => {
     const { sut } = makeSut()
     const promise = sut.add(mockAddAccountInput())
     await expect(promise).resolves.not.toThrow()
+  })
+
+  test('Should call AddAccountRepository with correct values', async() => {
+    const { sut, addAccountRepositorySpy } = makeSut()
+    const addAccountInput = mockAddAccountInput()
+    await sut.add(addAccountInput)
+    expect(addAccountRepositorySpy.input).toEqual(addAccountInput)
   })
 })
