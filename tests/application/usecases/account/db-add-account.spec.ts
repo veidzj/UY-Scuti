@@ -23,4 +23,11 @@ describe('DbAddAccount', () => {
     await sut.add(addAccountInput)
     expect(checkAccountByEmailRepositorySpy.email).toBe(addAccountInput.email)
   })
+
+  test('Should throw if CheckAccountByEmailRepository throws', async() => {
+    const { sut, checkAccountByEmailRepositorySpy } = makeSut()
+    jest.spyOn(checkAccountByEmailRepositorySpy, 'check').mockRejectedValueOnce(new Error())
+    const promise = sut.add(mockAddAccountInput())
+    await expect(promise).rejects.toThrow()
+  })
 })
