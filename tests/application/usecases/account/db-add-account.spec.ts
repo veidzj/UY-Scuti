@@ -3,20 +3,24 @@ import { mockAddAccountInput } from '@/tests/domain/mocks/account/add-account-mo
 import { DbAddAccount } from '@/application/usecases/account/db-add-account'
 import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 import { AddAccountRepositorySpy } from '@/tests/application/mocks/account/add-account-repository-mock'
+import { HasherSpy } from '@/tests/application/mocks/account/cryptography/hasher-mock'
 
 interface Sut {
   sut: DbAddAccount
   checkAccountByEmailRepositorySpy: CheckAccountByEmailRepositorySpy
+  hasherSpy: HasherSpy
   addAccountRepositorySpy: AddAccountRepositorySpy
 }
 
 const makeSut = (): Sut => {
   const checkAccountByEmailRepositorySpy = new CheckAccountByEmailRepositorySpy()
+  const hasherSpy = new HasherSpy()
   const addAccountRepositorySpy = new AddAccountRepositorySpy()
-  const sut = new DbAddAccount(checkAccountByEmailRepositorySpy, addAccountRepositorySpy)
+  const sut = new DbAddAccount(checkAccountByEmailRepositorySpy, hasherSpy, addAccountRepositorySpy)
   return {
     sut,
     checkAccountByEmailRepositorySpy,
+    hasherSpy,
     addAccountRepositorySpy
   }
 }
@@ -42,6 +46,15 @@ describe('DbAddAccount', () => {
       checkAccountByEmailRepositorySpy.output = true
       const promise = sut.add(mockAddAccountInput())
       await expect(promise).rejects.toThrow(new EmailInUseError())
+    })
+  })
+
+  describe('Hasher', () => {
+    test('Should call Hasher with correct password', async() => {
+      const { sut, hasherSpy } = makeSut()
+      const addAccountInput = mockAddAccountInput()
+      await sut.add(addAccountInput)
+      expect(hasherSpy.plainText).toBe(addAccountInput.password)
     })
   })
 

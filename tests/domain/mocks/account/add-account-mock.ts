@@ -14,5 +14,6 @@ export class AddAccountSpy implements AddAccount {
 
 export const mockAddAccountInput = (): AddAccount.Input => ({
   username: faker.internet.userName(),
-  email: faker.internet.email()
+  email: faker.internet.email(),
+  password: faker.internet.password()
 })
