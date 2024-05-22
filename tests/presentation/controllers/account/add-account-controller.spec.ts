@@ -50,7 +50,7 @@ describe('AddAccountController', () => {
     const response = await sut.handle(mockRequest())
     expect(response).toEqual({
       statusCode: 409,
-      body: 'Email is already in use'
+      body: new EmailInUseError()
     })
   })
 

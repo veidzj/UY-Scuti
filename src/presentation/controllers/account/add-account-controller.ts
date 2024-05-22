@@ -22,7 +22,7 @@ export class AddAccountController implements Controller {
         return badRequest(error)
       }
       if (error instanceof EmailInUseError) {
-        return conflict(error.message)
+        return conflict(error)
       }
       return serverError()
     }

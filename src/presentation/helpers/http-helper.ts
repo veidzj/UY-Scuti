@@ -14,10 +14,10 @@ export const badRequest = (data: object): HttpResponse => {
   }
 }
 
-export const conflict = (message: string): HttpResponse => {
+export const conflict = (data: object): HttpResponse => {
   return {
     statusCode: 409,
-    body: message
+    body: data
   }
 }
 
