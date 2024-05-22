@@ -69,4 +69,14 @@ describe('AddAccountController', () => {
     await sut.handle(request)
     expect(addAccountSpy.input).toEqual(request)
   })
+
+  test('Should return status 500 if Validation throws', async() => {
+    const { sut, validationSpy } = makeSut()
+    jest.spyOn(validationSpy, 'validate').mockImplementationOnce(() => { throw new Error() })
+    const response = await sut.handle(mockRequest())
+    expect(response).toEqual({
+      statusCode: 500,
+      body: 'The server has encountered an unexpected error'
+    })
+  })
 })
