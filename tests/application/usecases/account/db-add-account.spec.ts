@@ -62,4 +62,10 @@ describe('DbAddAccount', () => {
     const promise = sut.add(mockAddAccountInput())
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return an accountId on success', async() => {
+    const { sut, addAccountRepositorySpy } = makeSut()
+    const accountId = await sut.add(mockAddAccountInput())
+    expect(accountId).toBe(addAccountRepositorySpy.output)
+  })
 })
