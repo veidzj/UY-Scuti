@@ -1,5 +1,6 @@
-import { DbAddAccount } from '@/application/usecases/account/db-add-account'
 import { CheckAccountByEmailRepositorySpy } from '@/tests/application/mocks/account/check-account-by-email-repository-mock'
+import { mockAddAccountInput } from '@/tests/domain/mocks/account/add-account-mock'
+import { DbAddAccount } from '@/application/usecases/account/db-add-account'
 
 interface Sut {
   sut: DbAddAccount
@@ -18,7 +19,8 @@ const makeSut = (): Sut => {
 describe('DbAddAccount', () => {
   test('Should call CheckAccountByEmailRepository with correct email', async() => {
     const { sut, checkAccountByEmailRepositorySpy } = makeSut()
-    await sut.add({ username: 'any_username', email: 'any_email@mail.com' })
-    expect(checkAccountByEmailRepositorySpy.email).toBe('any_email@mail.com')
+    const addAccountInput = mockAddAccountInput()
+    await sut.add(addAccountInput)
+    expect(checkAccountByEmailRepositorySpy.email).toBe(addAccountInput.email)
   })
 })

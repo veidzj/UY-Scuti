@@ -1,10 +1,10 @@
 import { type Controller } from '@/presentation/protocols/controller'
 import { type HttpResponse } from '@/presentation/protocols/http-response'
 import { type Validation } from '@/presentation/protocols/validation'
-import { type AddAccount } from '@/domain/usecases/account/add-account'
 import { badRequest, conflict, created, serverError } from '@/presentation/helpers/http-helper'
-import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 import { ValidationError } from '@/validation/errors/validation-error'
+import { type AddAccount } from '@/domain/usecases/account/add-account'
+import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 
 export class AddAccountController implements Controller {
   constructor(

@@ -1,8 +1,10 @@
-import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
-import { AddAccountController } from '@/presentation/controllers/account/add-account-controller'
-import { AddAccountSpy } from '@/tests/domain/mocks/account/add-account-mock'
+import { faker } from '@faker-js/faker'
+
 import { ValidationSpy } from '@/tests/presentation/mocks/validation-mock'
+import { AddAccountSpy } from '@/tests/domain/mocks/account/add-account-mock'
+import { AddAccountController } from '@/presentation/controllers/account/add-account-controller'
 import { ValidationError } from '@/validation/errors/validation-error'
+import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 
 interface Sut {
   sut: AddAccountController
@@ -22,8 +24,8 @@ const makeSut = (): Sut => {
 }
 
 const mockRequest = (): AddAccountController.Request => ({
-  username: 'any_username',
-  email: 'any_email@mail.com'
+  username: faker.internet.userName(),
+  email: faker.internet.email()
 })
 
 describe('AddAccountController', () => {
@@ -37,11 +39,12 @@ describe('AddAccountController', () => {
 
     test('Should return status 400 if Validation throws ValidationError', async() => {
       const { sut, validationSpy } = makeSut()
-      jest.spyOn(validationSpy, 'validate').mockImplementationOnce(() => { throw new ValidationError('error_message') })
+      const errorMessage = faker.word.words()
+      jest.spyOn(validationSpy, 'validate').mockImplementationOnce(() => { throw new ValidationError(errorMessage) })
       const response = await sut.handle(mockRequest())
       expect(response).toEqual({
         statusCode: 400,
-        body: new ValidationError('error_message')
+        body: new ValidationError(errorMessage)
       })
     })
 
