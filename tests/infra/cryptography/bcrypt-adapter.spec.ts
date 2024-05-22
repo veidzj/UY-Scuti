@@ -27,4 +27,10 @@ describe('BcryptAdapter', () => {
     const promise = sut.hash(plainText)
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return a hashed value on success', async() => {
+    const sut = new BcryptAdapter(salt)
+    const hashedValue = await sut.hash(plainText)
+    expect(hashedValue).toBe(digest)
+  })
 })
