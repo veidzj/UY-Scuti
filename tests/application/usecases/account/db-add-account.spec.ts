@@ -3,7 +3,7 @@ import { mockAddAccountInput } from '@/tests/domain/mocks/account/add-account-mo
 import { DbAddAccount } from '@/application/usecases/account/db-add-account'
 import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 import { AddAccountRepositorySpy } from '@/tests/application/mocks/account/add-account-repository-mock'
-import { HasherSpy } from '@/tests/application/mocks/account/cryptography/hasher-mock'
+import { HasherSpy } from '@/tests/application/mocks/cryptography/hasher-mock'
 
 interface Sut {
   sut: DbAddAccount

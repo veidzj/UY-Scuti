@@ -1,5 +1,5 @@
 import { type CheckAccountByEmailRepository } from '@/application/protocols/account/check-account-by-email-repository'
-import { type Hasher } from '@/application/protocols/account/cryptography/hasher'
+import { type Hasher } from '@/application/protocols/cryptography/hasher'
 import { type AddAccountRepository } from '@/application/protocols/account/add-account-repository'
 import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 import { type AddAccount } from '@/domain/usecases/account/add-account'
