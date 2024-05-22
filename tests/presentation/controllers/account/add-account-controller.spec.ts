@@ -1,17 +1,21 @@
 import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 import { AddAccountController } from '@/presentation/controllers/account/add-account-controller'
 import { AddAccountSpy } from '@/tests/domain/mocks/add-account-mock'
+import { ValidationSpy } from '@/tests/presentation/mocks/validation-mock'
 
 interface Sut {
   sut: AddAccountController
   addAccountSpy: AddAccountSpy
+  validationSpy: ValidationSpy
 }
 
 const makeSut = (): Sut => {
+  const validationSpy = new ValidationSpy()
   const addAccountSpy = new AddAccountSpy()
-  const sut = new AddAccountController(addAccountSpy)
+  const sut = new AddAccountController(validationSpy, addAccountSpy)
   return {
     sut,
+    validationSpy,
     addAccountSpy
   }
 }
@@ -57,5 +61,12 @@ describe('AddAccountController', () => {
       statusCode: 500,
       body: 'The server has encountered an unexpected error'
     })
+  })
+
+  test('Should call Validation with correct values', async() => {
+    const { sut, addAccountSpy } = makeSut()
+    const request = mockRequest()
+    await sut.handle(request)
+    expect(addAccountSpy.input).toEqual(request)
   })
 })
