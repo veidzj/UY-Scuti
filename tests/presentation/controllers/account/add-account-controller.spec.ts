@@ -2,6 +2,7 @@ import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 import { AddAccountController } from '@/presentation/controllers/account/add-account-controller'
 import { AddAccountSpy } from '@/tests/domain/mocks/add-account-mock'
 import { ValidationSpy } from '@/tests/presentation/mocks/validation-mock'
+import { ValidationError } from '@/validation/errors/validation-error'
 
 interface Sut {
   sut: AddAccountController
@@ -68,6 +69,16 @@ describe('AddAccountController', () => {
     const request = mockRequest()
     await sut.handle(request)
     expect(addAccountSpy.input).toEqual(request)
+  })
+
+  test('Should return status 400 if Validation throws ValidationError', async() => {
+    const { sut, validationSpy } = makeSut()
+    jest.spyOn(validationSpy, 'validate').mockImplementationOnce(() => { throw new ValidationError('error_message') })
+    const response = await sut.handle(mockRequest())
+    expect(response).toEqual({
+      statusCode: 400,
+      body: new ValidationError('error_message')
+    })
   })
 
   test('Should return status 500 if Validation throws', async() => {
