@@ -14,7 +14,7 @@ export class DbAddAccount implements AddAccount {
     if (emailInUse) {
       throw new EmailInUseError()
     }
-    await this.addAccountRepository.add(input)
-    return ''
+    const accountId = await this.addAccountRepository.add(input)
+    return accountId
   }
 }
