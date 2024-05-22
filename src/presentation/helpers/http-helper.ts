@@ -7,6 +7,13 @@ export const created = (data: object): HttpResponse => {
   }
 }
 
+export const badRequest = (data: object): HttpResponse => {
+  return {
+    statusCode: 400,
+    body: data
+  }
+}
+
 export const conflict = (message: string): HttpResponse => {
   return {
     statusCode: 409,
