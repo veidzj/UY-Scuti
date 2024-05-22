@@ -6,5 +6,6 @@ export namespace AddAccount {
   export interface Input {
     username: string
     email: string
+    password: string
   }
 }
