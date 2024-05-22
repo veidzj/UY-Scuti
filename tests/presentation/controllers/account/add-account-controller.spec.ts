@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker'
 import { ValidationSpy } from '@/tests/presentation/mocks/validation-mock'
 import { AddAccountSpy } from '@/tests/domain/mocks/account/add-account-mock'
 import { AddAccountController } from '@/presentation/controllers/account/add-account-controller'
+import { badRequest, conflict, created, serverError } from '@/presentation/helpers/http-helper'
 import { ValidationError } from '@/validation/errors/validation-error'
 import { EmailInUseError } from '@/domain/errors/account/email-in-use-error'
 
@@ -43,20 +44,14 @@ describe('AddAccountController', () => {
       const errorMessage = faker.word.words()
       jest.spyOn(validationSpy, 'validate').mockImplementationOnce(() => { throw new ValidationError(errorMessage) })
       const response = await sut.handle(mockRequest())
-      expect(response).toEqual({
-        statusCode: 400,
-        body: new ValidationError(errorMessage)
-      })
+      expect(response).toEqual(badRequest(new ValidationError(errorMessage)))
     })
 
     test('Should return status 500 if Validation throws', async() => {
       const { sut, validationSpy } = makeSut()
       jest.spyOn(validationSpy, 'validate').mockImplementationOnce(() => { throw new Error() })
       const response = await sut.handle(mockRequest())
-      expect(response).toEqual({
-        statusCode: 500,
-        body: 'The server has encountered an unexpected error'
-      })
+      expect(response).toEqual(serverError())
     })
   })
 
@@ -72,31 +67,20 @@ describe('AddAccountController', () => {
       const { sut, addAccountSpy } = makeSut()
       jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(new EmailInUseError())
       const response = await sut.handle(mockRequest())
-      expect(response).toEqual({
-        statusCode: 409,
-        body: new EmailInUseError()
-      })
+      expect(response).toEqual(conflict(new EmailInUseError()))
     })
 
     test('Should return status 500 if AddAccount throws', async() => {
       const { sut, addAccountSpy } = makeSut()
       jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(new Error())
       const response = await sut.handle(mockRequest())
-      expect(response).toEqual({
-        statusCode: 500,
-        body: 'The server has encountered an unexpected error'
-      })
+      expect(response).toEqual(serverError())
     })
 
     test('Should return status 201 with accountId on success', async() => {
       const { sut, addAccountSpy } = makeSut()
       const response = await sut.handle(mockRequest())
-      expect(response).toEqual({
-        statusCode: 201,
-        body: {
-          accountId: addAccountSpy.output
-        }
-      })
+      expect(response).toEqual(created({ accountId: addAccountSpy.output }))
     })
   })
 })
