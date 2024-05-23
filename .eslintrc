@@ -6,7 +6,8 @@
   "rules": {
     "space-before-function-paren": ["error", "never"],
     "@typescript-eslint/space-before-function-paren": "off",
-    "@typescript-eslint/no-namespace": "off"
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off"
   },
   "ignorePatterns": ["*.config.ts"]
 }
