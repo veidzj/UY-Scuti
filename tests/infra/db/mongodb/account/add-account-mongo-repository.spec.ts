@@ -1,20 +1,14 @@
 import { type Collection, ObjectId } from 'mongodb'
 
-import { AddAccountMongoRepository } from '@/infra/db/mongodb/account/add-account-mongo-repository'
+import { mockAddAccountRepositoryInput } from '@/tests/application/mocks/account/add-account-repository-mock'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
-import { type AddAccountRepository } from '@/application/protocols/account/add-account-repository'
+import { AddAccountMongoRepository } from '@/infra/db/mongodb/account/add-account-mongo-repository'
 
 let accountCollection: Collection
 
 const makeSut = (): AddAccountMongoRepository => {
   return new AddAccountMongoRepository()
 }
-
-const mockAddAccountRepositoryInput = (): AddAccountRepository.Input => ({
-  username: '',
-  email: '',
-  password: ''
-})
 
 describe('AddAccountMongoRepository', () => {
   const mongoHelper: MongoHelper = MongoHelper.getInstance()

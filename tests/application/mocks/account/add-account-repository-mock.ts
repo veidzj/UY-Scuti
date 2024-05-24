@@ -11,3 +11,9 @@ export class AddAccountRepositorySpy implements AddAccountRepository {
     return this.output
   }
 }
+
+export const mockAddAccountRepositoryInput = (): AddAccountRepository.Input => ({
+  username: faker.internet.userName(),
+  email: faker.internet.email(),
+  password: faker.internet.password()
+})
