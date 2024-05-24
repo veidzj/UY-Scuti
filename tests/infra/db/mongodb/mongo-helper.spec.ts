@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 
 describe('MongoHelper', () => {
-  test('Should throw if client is null', () => {
+  test('Should throw if client is null when getting the collection', () => {
     const mongoHelper: MongoHelper = MongoHelper.getInstance()
 
     expect(() => {
