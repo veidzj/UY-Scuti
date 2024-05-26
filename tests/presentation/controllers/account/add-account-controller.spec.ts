@@ -27,7 +27,9 @@ const makeSut = (): Sut => {
 const mockRequest = (): AddAccountController.Request => ({
   username: faker.internet.userName(),
   email: faker.internet.email(),
-  password: faker.internet.password()
+  password: faker.internet.password(),
+  birthdate: faker.date.birthdate().toString(),
+  profileImage: faker.internet.url()
 })
 
 describe('AddAccountController', () => {

@@ -7,5 +7,7 @@ export namespace AddAccountRepository {
     username: string
     email: string
     password: string
+    birthdate: string
+    profileImage?: string
   }
 }
